@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MovieTrivia.Models.Leaderboard>
+
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Top Scores</h1>
+    <p class="lead">See who the movie buffs are!</p>
+
+    <table class="table table-striped mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int rank = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(rank++)</td>
+                    <td>@item.PlayerName</td>
+                    <td>@item.Score</td>
+                    <td>@item.DatePosted.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Index" class="btn btn-primary mt-3">Play Again</a>
+</div>

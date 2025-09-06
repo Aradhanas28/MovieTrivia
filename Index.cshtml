@@ -1,0 +1,109 @@
+﻿@using MovieTrivia.Models
+@model MovieQuote
+@{
+    ViewData["Title"] = "Movie Trivia Quiz";
+    var score = Context.Session.GetInt32("score") ?? 0;
+}
+
+<!-- Custom Movie-Themed Styles -->
+<style>
+    body {
+        background: radial-gradient(circle at top, #1c1c1c, #000000);
+        color: #fff;
+        font-family: 'Cinzel', serif;
+    }
+
+    h1, h3, p, .card-text {
+        color: #fff;
+    }
+
+    .movie-header {
+        background: url('https://upload.wikimedia.org/wikipedia/commons/0/08/35mm_filmstrip.png') center/cover no-repeat;
+        padding: 30px 0;
+        border-bottom: 4px solid gold;
+        text-shadow: 2px 2px 5px black;
+    }
+
+    .movie-card {
+        background-color: rgba(25, 25, 25, 0.95);
+        border: 2px solid gold;
+        box-shadow: 0 0 20px gold;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .movie-card:hover {
+            transform: scale(1.02);
+        }
+
+    .list-group-item {
+        background-color: #222;
+        color: white;
+        border: 1px solid gold;
+        transition: all 0.2s;
+    }
+
+        .list-group-item:hover {
+            background-color: gold;
+            color: black;
+            transform: scale(1.05);
+        }
+
+    .btn-info {
+        background-color: gold;
+        color: black;
+        font-weight: bold;
+        border: none;
+    }
+
+    .blockquote {
+        font-style: italic;
+        font-size: 1.3rem;
+        border-left: 5px solid gold;
+        padding-left: 15px;
+    }
+</style>
+
+<!-- Header -->
+<div class="text-center movie-header">
+    <h1 class="display-4 fw-bold">🎬 Movie Trivia Quiz 🎬</h1>
+    <a asp-action="Leaderboard" class="btn btn-info mt-3">🏆 View Leaderboard</a>
+</div>
+
+<!-- Feedback Message -->
+@if (TempData["Feedback"] != null)
+{
+    <div class="alert alert-warning text-center mt-3" role="alert">
+        @TempData["Feedback"]
+    </div>
+}
+
+<!-- Quiz Card -->
+<div class="card movie-card mt-4 mx-auto" style="max-width: 40rem;">
+    <div class="card-header bg-dark text-white text-center">
+        <h3>Current Score: <span class="text-warning">@score</span></h3>
+    </div>
+    <div class="card-body text-center">
+        <blockquote class="blockquote">
+            <p class="mb-0">" @Model.QuoteText "</p>
+        </blockquote>
+        <p class="card-text mt-3">Which movie is this quote from?</p>
+
+        <form asp-action="Guess" method="post">
+            <input type="hidden" name="quoteId" value="@Model.Id" />
+            <div class="list-group">
+                @foreach (var option in ViewBag.ShuffledOptions)
+                {
+                    <button type="submit"
+                            name="selectedMovie"
+                            value="@option"
+                            class="list-group-item list-group-item-action btn-lg">
+                        🎥 @option
+                    </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
